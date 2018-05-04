@@ -1,0 +1,33 @@
+﻿  Mesh.cpp
+  Player.cpp
+  Scene.cpp
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(588): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(589): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(590): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(591): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(592): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(593): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(594): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(595): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(596): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(597): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(598): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(600): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(601): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(602): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(603): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(604): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(605): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(606): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(607): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(608): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(609): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(610): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(611): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(612): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(613): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(614): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\xorbs\onedrive\바탕 화면\공부\3dgp\따라하기\software renderer\labproject(scenes)\labproject\scene.cpp(615): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  Timer.cpp
+  코드를 생성하고 있습니다...
+  LabProject.vcxproj -> C:\Users\xorbs\OneDrive\바탕 화면\공부\3DGP\따라하기\Software Renderer\LabProject(Scenes)\x64\Debug\LabProject.exe
