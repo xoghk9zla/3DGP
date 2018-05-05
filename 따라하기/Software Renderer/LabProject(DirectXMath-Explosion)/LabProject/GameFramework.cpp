@@ -168,30 +168,30 @@ void CGameFramework::OnDestroy()
 
 void CGameFramework::ProcessInput()
 {
-	static UCHAR pKeyBuffer[256];
-	DWORD dwDirection = 0;
+	static UCHAR pKeyBuffer[256];	// 키 입력 버퍼
+	DWORD dwDirection = 0;			// 방향키
 	if (GetKeyboardState(pKeyBuffer))
 	{
-		if (pKeyBuffer[VK_UP] & 0xF0) dwDirection |= DIR_FORWARD;
+		if (pKeyBuffer[VK_UP] & 0xF0) dwDirection |= DIR_FORWARD;		// |= OR대입연산자 
 		if (pKeyBuffer[VK_DOWN] & 0xF0) dwDirection |= DIR_BACKWARD;
 		if (pKeyBuffer[VK_LEFT] & 0xF0) dwDirection |= DIR_LEFT;
 		if (pKeyBuffer[VK_RIGHT] & 0xF0) dwDirection |= DIR_RIGHT;
 		if (pKeyBuffer[VK_PRIOR] & 0xF0) dwDirection |= DIR_UP;
 		if (pKeyBuffer[VK_NEXT] & 0xF0) dwDirection |= DIR_DOWN;
 	}
-	float cxDelta = 0.0f, cyDelta = 0.0f;
-	POINT ptCursorPos;
-	if (GetCapture() == m_hWnd)
+	float cxDelta = 0.0f, cyDelta = 0.0f;	// x증가량, y증가량
+	POINT ptCursorPos;	// 마우스 커서의 위치
+	if (GetCapture() == m_hWnd) // 마우스를 통해 입력받은 윈도우의 핸들을 반환
 	{
-		SetCursor(NULL);
-		GetCursorPos(&ptCursorPos);
+		SetCursor(NULL);	// 커서의 모습을 바꿔줌
+		GetCursorPos(&ptCursorPos);	// 커서의 좌표를 받아옴
 		cxDelta = (float)(ptCursorPos.x - m_ptOldCursorPos.x) / 3.0f;
 		cyDelta = (float)(ptCursorPos.y - m_ptOldCursorPos.y) / 3.0f;
-		SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
+		SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);	// 마우스 커서의 위치를 이전 위치로 변경
 	}
-	if ((dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
+	if ((dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))	// 방향키의 입력이 있거나 x좌표 또는 y좌표의 변화가 있을 때
 	{
-		if (cxDelta || cyDelta)
+		if (cxDelta || cyDelta)	
 		{
 			if (pKeyBuffer[VK_RBUTTON] & 0xF0)
 				m_pPlayer->Rotate(cyDelta, 0.0f, -cxDelta);
@@ -207,7 +207,7 @@ void CGameFramework::FrameAdvance()
 {    
     if (!m_bActive) return;
 
-	m_GameTimer.Tick(60.0f);
+	m_GameTimer.Tick(0.0f);
 
 	ProcessInput();
 
