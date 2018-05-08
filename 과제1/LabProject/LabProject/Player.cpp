@@ -122,3 +122,8 @@ void CPlayer::Render(HDC hDCFrameBuffer, CCamera *pCamera)
 
 	CGameObject::Render(hDCFrameBuffer, pCamera);
 }
+
+void CPlayer::Shoot()
+{
+	m_Bulletlsit.emplace_back(1.14f, 1.14f, 1.14f);
+}

@@ -34,6 +34,9 @@
 #include <tchar.h>
 #include <math.h>
 
+#include <list>
+#include <vld.h>
+
 #include <d3d12.h>
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
@@ -44,6 +47,7 @@
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;
+using namespace std;
 
 #pragma comment(lib, "d3d12.lib")
 

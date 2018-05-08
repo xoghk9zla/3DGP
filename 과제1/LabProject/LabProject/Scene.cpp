@@ -20,7 +20,7 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
-		case 'A':	// 오브젝트 전체 폭발
+		case 'Z':	// 오브젝트 전체 폭발
 		{
 			for (int i = 0; i < m_nObjects; i++)
 			{
@@ -48,7 +48,7 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 		}
 		case '2':
 		{
-			
+			m_pPlayer->Shoot();
 			break;
 		}
 		default:
@@ -71,7 +71,7 @@ void CScene::BuildObjects()
 	pWallCubeMesh->SetOOBB(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(fHalfWidth, fHalfHeight, fHalfDepth * 0.3f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	m_pWallsObject = new CWallsObject();
-	m_pWallsObject->SetPosition(0.0f, 0.0f, 400.0f);
+	m_pWallsObject->SetPosition(0.0f, 0.0f, 470.0f);
 	m_pWallsObject->SetMesh(pWallCubeMesh);
 	m_pWallsObject->SetColor(RGB(127.5, 0, 127.5));
 	m_pWallsObject->m_pxmf4WallPlanes[0] = XMFLOAT4(+1.0f, 0.0f, 0.0f, fHalfWidth);
@@ -279,9 +279,11 @@ void CScene::Animate(float fElapsedTime)
 {
 	m_pWallsObject->Animate(fElapsedTime);
 	// 이 부분 수정 필요 옆면에 닿으면 튕겨져 나가고, 앞 뒷면에 닿으면 새로 벽 생성
-	//if (m_pWallsObject->m_xmOOBB.Contains(XMLoadFloat3(&m_pPlayer->m_xmf3Position)) == DISJOINT) m_pWallsObject->SetPosition(m_pPlayer->m_xmf3Position);
+	//if (m_pWallsObject->m_xmOOBB.Contains(XMLoadFloat3(&m_pPlayer->m_xmf3Position)) == DISJOINT) m_pPlayer->SetPosition(0.0,0.0,0.0);
 
 	for (int i = 0; i < m_nObjects; i++) m_ppObjects[i]->Animate(fElapsedTime);
+
+	for(int i = 0 ; i < m_pPlayer->m_Bulletlsit.size(); ++i) 
 
 	CheckObjectByWallCollisions();
 

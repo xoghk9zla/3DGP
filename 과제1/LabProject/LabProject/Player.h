@@ -9,9 +9,9 @@ public:
 	virtual ~CPlayer();
 
 	XMFLOAT3					m_xmf3Position;
-	XMFLOAT3					m_xmf3Right;	// 플레이어의 오른쪽 방향 벡터
-	XMFLOAT3					m_xmf3Up;		// 플레이어의 위쪽 방향 벡터
-	XMFLOAT3					m_xmf3Look;		// 플레이어의 앞쪽 방향 벡터
+	XMFLOAT3					m_xmf3Right;	// 플레이어의 Right 벡터
+	XMFLOAT3					m_xmf3Up;		// 플레이어의 UP 벡터
+	XMFLOAT3					m_xmf3Look;		// 플레이어의 LOOK 벡터
 
 	XMFLOAT3					m_xmf3CameraOffset;
 	XMFLOAT3					m_xmf3Velocity;
@@ -23,6 +23,8 @@ public:
 
 	CCamera						*m_pCamera = NULL;
 
+	list<CCubeMesh>				m_Bulletlsit;		// 총알 리스트
+
 	void SetPosition(float x, float y, float z);
 	void Move(DWORD dwDirection, float fDistance);
 	void Move(XMFLOAT3& xmf3Shift, bool bUpdateVelocity);
@@ -30,6 +32,7 @@ public:
 	void Rotate(float fPitch = 0.0f, float fYaw = 0.0f, float fRoll = 0.0f);
 	void SetCameraOffset(XMFLOAT3& xmf3CameraOffset);
 	void Update(float fTimeElapsed=0.016f);
+	void Shoot();
 
 	virtual void Render(HDC hDCFrameBuffer, CCamera *pCamera);
 };
