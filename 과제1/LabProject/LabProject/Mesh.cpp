@@ -92,25 +92,30 @@ CCubeMesh::CCubeMesh(float fWidth, float fHeight, float fDepth) : CMesh(4)
 	float fHalfHeight = fHeight * 0.5f;
 	float fHalfDepth = fDepth * 0.5f;
 
-	CPolygon *pFrontFace = new CPolygon(2);
-	pFrontFace->SetVertex(0, CVertex(-fHalfWidth, +fHalfHeight, -fHalfDepth));	// + + -
-	pFrontFace->SetVertex(3, CVertex(-fHalfWidth, -fHalfHeight, -fHalfDepth));	// - - -
+	CPolygon *pFrontFace = new CPolygon(4);
+	pFrontFace->SetVertex(0, CVertex(-fHalfWidth, +fHalfHeight, -fHalfDepth));	// - + -
+	pFrontFace->SetVertex(1, CVertex(-fHalfWidth, -fHalfHeight, -fHalfDepth));	// - - -
+	pFrontFace->SetVertex(2, CVertex(+fHalfWidth, -fHalfHeight, -fHalfDepth));	// + - -
+	pFrontFace->SetVertex(3, CVertex(+fHalfWidth, +fHalfHeight, -fHalfDepth));	// + + -
 	SetPolygon(0, pFrontFace);
 
-	CPolygon *pLeftFace = new CPolygon(2);
-	pLeftFace->SetVertex(0, CVertex(-fHalfWidth, +fHalfHeight, +fHalfDepth));	// - + +
-	pLeftFace->SetVertex(3, CVertex(-fHalfWidth, -fHalfHeight, +fHalfDepth));	// - - +
-	SetPolygon(1, pLeftFace);
+	CPolygon *pRightFace = new CPolygon(3);
+	pRightFace->SetVertex(0, CVertex(+fHalfWidth, +fHalfHeight, -fHalfDepth));	// + + -
+	pRightFace->SetVertex(1, CVertex(+fHalfWidth, +fHalfHeight, +fHalfDepth));	// + + +
+	pRightFace->SetVertex(2, CVertex(+fHalfWidth, -fHalfHeight, +fHalfDepth));	// + - +
+	SetPolygon(1, pRightFace);
 
-	CPolygon *pBackFace = new CPolygon(2);
-	pBackFace->SetVertex(0, CVertex(-fHalfWidth, -fHalfHeight, +fHalfDepth));	// - - +
-	pBackFace->SetVertex(3, CVertex(-fHalfWidth, +fHalfHeight, +fHalfDepth));	// - + +
+	CPolygon *pBackFace = new CPolygon(3);
+	pBackFace->SetVertex(0, CVertex(+fHalfWidth, +fHalfHeight, +fHalfDepth));	// + + +
+	pBackFace->SetVertex(1, CVertex(-fHalfWidth, +fHalfHeight, +fHalfDepth));	// - + +
+	pBackFace->SetVertex(2, CVertex(-fHalfWidth, -fHalfHeight, +fHalfDepth));	// - - +
 	SetPolygon(2, pBackFace);
 
-	CPolygon *pRightFace = new CPolygon(2);
-	pRightFace->SetVertex(0, CVertex(+fHalfWidth, +fHalfHeight, -fHalfDepth));	// + + -
-	pRightFace->SetVertex(3, CVertex(+fHalfWidth, -fHalfHeight, -fHalfDepth));	// + - -
-	SetPolygon(3, pRightFace);
+	CPolygon *pLeftFace = new CPolygon(3);
+	pLeftFace->SetVertex(0, CVertex(-fHalfWidth, +fHalfHeight, +fHalfDepth));	// - + +
+	pLeftFace->SetVertex(1, CVertex(-fHalfWidth, +fHalfHeight, -fHalfDepth));	// - + -
+	pLeftFace->SetVertex(2, CVertex(-fHalfWidth, -fHalfHeight, -fHalfDepth));	// - - -
+	SetPolygon(3, pLeftFace);
 	
 }
 
