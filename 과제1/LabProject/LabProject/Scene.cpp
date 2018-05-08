@@ -17,36 +17,46 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 {
 	switch (nMessageID)
 	{
-		case WM_KEYDOWN:
-			switch (wParam)
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case 'A':	// 오브젝트 전체 폭발
+		{
+			for (int i = 0; i < m_nObjects; i++)
 			{
-				case '1':
-				case '2':
-				case '3':
-				case '4':
-				case '5':
-				case '6':
-				case '7':
-				case '8':
-				case '9':
-				{
-					CExplosiveObject *pExplosiveObject = (CExplosiveObject *)m_ppObjects[int(wParam - '1')];
-					pExplosiveObject->m_bBlowingUp = true;
-					break;
-				}
-				case 'A':
-					for (int i = 0; i < m_nObjects; i++)
-					{
-						CExplosiveObject *pExplosiveObject = (CExplosiveObject *)m_ppObjects[i];
-						pExplosiveObject->m_bBlowingUp = true;
-					}
-					break;
-				default:
-					break;
+				CExplosiveObject *pExplosiveObject = (CExplosiveObject *)m_ppObjects[i];
+				pExplosiveObject->m_bBlowingUp = true;
 			}
 			break;
+		}
+		case '1':	// 오브젝트 추가
+		{
+			CCubeMesh * pObjectCubeMesh = new CCubeMesh(4.0f, 4.0f, 4.0f);
+			pObjectCubeMesh->SetOOBB(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(2.0f, 2.0f, 2.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+			m_nObjects += 1;
+
+			m_ppObjects[m_nObjects - 1] = new CExplosiveObject();
+			m_ppObjects[m_nObjects - 1]->SetMesh(pObjectCubeMesh);
+			m_ppObjects[m_nObjects - 1]->SetColor(RGB(255, 0, 0));
+			m_ppObjects[m_nObjects - 1]->SetPosition(-13.5f, 0.0f, -14.0f);
+			m_ppObjects[m_nObjects - 1]->SetRotationAxis(XMFLOAT3(0.0f, 1.0f, 1.0f));
+			m_ppObjects[m_nObjects - 1]->SetRotationSpeed(90.0f);
+			m_ppObjects[m_nObjects - 1]->SetMovingDirection(XMFLOAT3(1.0f, 0.0f, 0.0f));
+			m_ppObjects[m_nObjects - 1]->SetMovingSpeed(10.5f);
+			break;
+		}
+		case '2':
+		{
+			
+			break;
+		}
 		default:
 			break;
+		}
+		break;
+	default:
+		break;
 	}
 }
 
@@ -54,8 +64,9 @@ void CScene::BuildObjects()
 {
 	CExplosiveObject::PrepareExplosion();
 
+	// 벽 생성
 	float fHalfWidth = 45.0f, fHalfHeight = 45.0f, fHalfDepth = 110.0f;
-	int iSubRects = 5;
+	int iSubRects = 30;
 	CWallMesh *pWallCubeMesh = new CWallMesh(fHalfWidth * 2.0f, fHalfHeight * 2.0f, fHalfDepth * 2.0f, iSubRects);
 	pWallCubeMesh->SetOOBB(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(fHalfWidth, fHalfHeight, fHalfDepth * 0.3f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
@@ -171,7 +182,9 @@ void CScene::ReleaseObjects()
 {
 	if (CExplosiveObject::m_pExplosionMesh) CExplosiveObject::m_pExplosionMesh->Release();
 
-	for (int i = 0; i < m_nObjects; i++) if (m_ppObjects[i]) delete m_ppObjects[i];
+	for (int i = 0; i < m_nObjects; i++)
+		if (m_ppObjects[i]) delete m_ppObjects[i];
+
 	if (m_ppObjects) delete[] m_ppObjects;
 
 	if (m_pWallsObject) delete m_pWallsObject;
@@ -215,49 +228,49 @@ void CScene::CheckObjectByWallCollisions()
 		ContainmentType containType = m_pWallsObject->m_xmOOBB.Contains(m_ppObjects[i]->m_xmOOBB);
 		switch (containType)
 		{
-			case DISJOINT:
+		case DISJOINT:
+		{
+			int nPlaneIndex = -1;
+			for (int j = 0; j < 6; j++)
 			{
-				int nPlaneIndex = -1;
-				for (int j = 0; j < 6; j++)
+				// 객체가 평면과 교차하는지 여부( FRONT = 0, INTERSECTING = 1, BACK = 2)
+				PlaneIntersectionType intersectType = m_ppObjects[i]->m_xmOOBB.Intersects(XMLoadFloat4(&m_pWallsObject->m_pxmf4WallPlanes[j]));
+				if (intersectType == BACK)
 				{
-					// 객체가 평면과 교차하는지 여부( FRONT = 0, INTERSECTING = 1, BACK = 2)
-					PlaneIntersectionType intersectType = m_ppObjects[i]->m_xmOOBB.Intersects(XMLoadFloat4(&m_pWallsObject->m_pxmf4WallPlanes[j]));
-					if (intersectType == BACK)
-					{
-						nPlaneIndex = j;
-						break;
-					}
+					nPlaneIndex = j;
+					break;
 				}
-				if (nPlaneIndex != -1)
-				{
-					XMVECTOR xmvNormal = XMVectorSet(m_pWallsObject->m_pxmf4WallPlanes[nPlaneIndex].x, m_pWallsObject->m_pxmf4WallPlanes[nPlaneIndex].y, m_pWallsObject->m_pxmf4WallPlanes[nPlaneIndex].z, 0.0f);
-					XMVECTOR xmvReflect = XMVector3Reflect(XMLoadFloat3(&m_ppObjects[i]->m_xmf3MovingDirection), xmvNormal);
-					XMStoreFloat3(&m_ppObjects[i]->m_xmf3MovingDirection, xmvReflect);
-				}
-				break;
 			}
-			case INTERSECTS:
+			if (nPlaneIndex != -1)
 			{
-				int nPlaneIndex = -1;
-				for (int j = 0; j < 6; j++)
-				{
-					PlaneIntersectionType intersectType = m_ppObjects[i]->m_xmOOBB.Intersects(XMLoadFloat4(&m_pWallsObject->m_pxmf4WallPlanes[j]));
-					if (intersectType == INTERSECTING)
-					{
-						nPlaneIndex = j;
-						break;
-					}
-				}
-				if (nPlaneIndex != -1)
-				{
-					XMVECTOR xmvNormal = XMVectorSet(m_pWallsObject->m_pxmf4WallPlanes[nPlaneIndex].x, m_pWallsObject->m_pxmf4WallPlanes[nPlaneIndex].y, m_pWallsObject->m_pxmf4WallPlanes[nPlaneIndex].z, 0.0f);
-					XMVECTOR xmvReflect = XMVector3Reflect(XMLoadFloat3(&m_ppObjects[i]->m_xmf3MovingDirection), xmvNormal);
-					XMStoreFloat3(&m_ppObjects[i]->m_xmf3MovingDirection, xmvReflect);
-				}
-				break;
+				XMVECTOR xmvNormal = XMVectorSet(m_pWallsObject->m_pxmf4WallPlanes[nPlaneIndex].x, m_pWallsObject->m_pxmf4WallPlanes[nPlaneIndex].y, m_pWallsObject->m_pxmf4WallPlanes[nPlaneIndex].z, 0.0f);
+				XMVECTOR xmvReflect = XMVector3Reflect(XMLoadFloat3(&m_ppObjects[i]->m_xmf3MovingDirection), xmvNormal);
+				XMStoreFloat3(&m_ppObjects[i]->m_xmf3MovingDirection, xmvReflect);
 			}
-			case CONTAINS:
-				break;
+			break;
+		}
+		case INTERSECTS:
+		{
+			int nPlaneIndex = -1;
+			for (int j = 0; j < 6; j++)
+			{
+				PlaneIntersectionType intersectType = m_ppObjects[i]->m_xmOOBB.Intersects(XMLoadFloat4(&m_pWallsObject->m_pxmf4WallPlanes[j]));
+				if (intersectType == INTERSECTING)
+				{
+					nPlaneIndex = j;
+					break;
+				}
+			}
+			if (nPlaneIndex != -1)
+			{
+				XMVECTOR xmvNormal = XMVectorSet(m_pWallsObject->m_pxmf4WallPlanes[nPlaneIndex].x, m_pWallsObject->m_pxmf4WallPlanes[nPlaneIndex].y, m_pWallsObject->m_pxmf4WallPlanes[nPlaneIndex].z, 0.0f);
+				XMVECTOR xmvReflect = XMVector3Reflect(XMLoadFloat3(&m_ppObjects[i]->m_xmf3MovingDirection), xmvNormal);
+				XMStoreFloat3(&m_ppObjects[i]->m_xmf3MovingDirection, xmvReflect);
+			}
+			break;
+		}
+		case CONTAINS:
+			break;
 		}
 	}
 }
@@ -265,6 +278,7 @@ void CScene::CheckObjectByWallCollisions()
 void CScene::Animate(float fElapsedTime)
 {
 	m_pWallsObject->Animate(fElapsedTime);
+	// 이 부분 수정 필요 옆면에 닿으면 튕겨져 나가고, 앞 뒷면에 닿으면 새로 벽 생성
 	if (m_pWallsObject->m_xmOOBB.Contains(XMLoadFloat3(&m_pPlayer->m_xmf3Position)) == DISJOINT) m_pWallsObject->SetPosition(m_pPlayer->m_xmf3Position);
 
 	for (int i = 0; i < m_nObjects; i++) m_ppObjects[i]->Animate(fElapsedTime);
