@@ -129,7 +129,7 @@ void CPlayer::Update(float fTimeElapsed)
 
 		pTempBullet->SetMesh(pTempCubeMesh);
 		pTempBullet->SetColor(RGB(150, 0, 70));
-		XMFLOAT3 tempLook = Vector3::ScalarProduct(m_xmf3Look, 5.f, true);
+		XMFLOAT3 tempLook = Vector3::ScalarProduct(m_xmf3Look, 5.0f, true);
 		pTempBullet->SetPosition(Vector3::Add(m_xmf3Position, tempLook));
 		pTempBullet->SetRotationAxis(XMFLOAT3(0.0f, 1.0f, 1.0f));
 		pTempBullet->SetRotationSpeed(1000.0f);

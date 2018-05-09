@@ -134,7 +134,7 @@ void CGameFramework::BuildObjects()
 {
 	CAirplaneMesh *pAirplaneMesh = new CAirplaneMesh(6.0f, 6.0f, 1.0f);
 	m_pPlayer = new CPlayer();
-	m_pPlayer->SetPosition(0.0f, 0.0f, -30.0f);
+	m_pPlayer->SetPosition(0.0f, 0.0f, 0.0f);
 	m_pPlayer->SetMesh(pAirplaneMesh);
 	m_pPlayer->SetColor(RGB(0, 0, 255));
 	m_pPlayer->SetCameraOffset(XMFLOAT3(0.0f, 5.0f, -15.0f));
@@ -208,7 +208,7 @@ void CGameFramework::FrameAdvance()
 {    
     if (!m_bActive) return;
 
-	m_GameTimer.Tick(60.0f);
+	m_GameTimer.Tick(0.0f);
 
 	ProcessInput();	
 
