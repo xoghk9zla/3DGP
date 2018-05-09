@@ -125,5 +125,5 @@ void CPlayer::Render(HDC hDCFrameBuffer, CCamera *pCamera)
 
 void CPlayer::Shoot()
 {
-	m_Bulletlsit.emplace_back(1.14f, 1.14f, 1.14f);
+//	m_Bulletlsit.emplace_back(1.14f, 1.14f, 1.14f);
 }

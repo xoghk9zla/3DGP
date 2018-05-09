@@ -57,28 +57,40 @@ void CMesh::SetPolygon(int nIndex, CPolygon *pPolygon)
 void CMesh::Render(HDC hDCFrameBuffer, XMFLOAT4X4& xmf4x4World, CCamera *pCamera)
 {
 	XMFLOAT4X4 xmf4x4Transform = Matrix4x4::Multiply(xmf4x4World, pCamera->m_xmf4x4ViewProject);
+
 	for (int j = 0; j < m_nPolygons; j++)
 	{
 		int nVertices = m_ppPolygons[j]->m_nVertices;
 		CVertex *pVertices = m_ppPolygons[j]->m_pVertices;
-		XMFLOAT3 xmf3Previous(-1.0f, 0.0f, 0.0f);
-		for (int i = 0; i <= nVertices; i++)
-		{
-			CVertex vertex = pVertices[i % nVertices];
-			//World/View/Projection Transformation(Perspective Divide)
-			XMFLOAT3 xmf3Current = Vector3::TransformCoord(vertex.m_xmf3Position, xmf4x4Transform);
-			if ((xmf3Current.z >= 0.0f) && (xmf3Current.z <= 1.0f))
-			{
-				//Screen Transformation
-				xmf3Current.x = +xmf3Current.x * (pCamera->m_Viewport.m_nWidth * 0.5f) + pCamera->m_Viewport.m_xStart + (pCamera->m_Viewport.m_nWidth * 0.5f);
-				xmf3Current.y = -xmf3Current.y * (pCamera->m_Viewport.m_nHeight * 0.5f) + pCamera->m_Viewport.m_yStart + (pCamera->m_Viewport.m_nHeight * 0.5f);
 
-				if (xmf3Previous.x >= 0.0f)
+		XMFLOAT3 p1 = Vector3::TransformCoord(pVertices[0].m_xmf3Position, xmf4x4Transform);
+		XMFLOAT3 p2 = Vector3::TransformCoord(pVertices[1].m_xmf3Position, xmf4x4Transform);
+		XMFLOAT3 p3 = Vector3::TransformCoord(pVertices[2].m_xmf3Position, xmf4x4Transform);
+
+		XMFLOAT3 dir1 = Vector3::Subtract(p2, p1);
+		XMFLOAT3 dir2 = Vector3::Subtract(p3, p2);
+
+		if (Vector3::CrossProduct(dir1, dir2).z < 0)
+		{
+			XMFLOAT3 xmf3Previous(-1.0f, 0.0f, 0.0f);
+			for (int i = 0; i <= nVertices; i++)
+			{
+				CVertex vertex = pVertices[i % nVertices];
+				//World/View/Projection Transformation(Perspective Divide)
+				XMFLOAT3 xmf3Current = Vector3::TransformCoord(vertex.m_xmf3Position, xmf4x4Transform);
+				if ((xmf3Current.z >= 0.0f) && (xmf3Current.z <= 1.0f))			//일단 절두체 컬링
 				{
-					::MoveToEx(hDCFrameBuffer, (long)xmf3Previous.x, (long)xmf3Previous.y, NULL);
-					::LineTo(hDCFrameBuffer, (long)xmf3Current.x, (long)xmf3Current.y);
+					//Screen Transformation
+					xmf3Current.x = +xmf3Current.x * (pCamera->m_Viewport.m_nWidth * 0.5f) + pCamera->m_Viewport.m_xStart + (pCamera->m_Viewport.m_nWidth * 0.5f);
+					xmf3Current.y = -xmf3Current.y * (pCamera->m_Viewport.m_nHeight * 0.5f) + pCamera->m_Viewport.m_yStart + (pCamera->m_Viewport.m_nHeight * 0.5f);
+
+					if (xmf3Previous.x >= 0.0f)
+					{
+						::MoveToEx(hDCFrameBuffer, (long)xmf3Previous.x, (long)xmf3Previous.y, NULL);
+						::LineTo(hDCFrameBuffer, (long)xmf3Current.x, (long)xmf3Current.y);
+					}
+					xmf3Previous = xmf3Current;
 				}
-				xmf3Previous = xmf3Current;
 			}
 		}
 	}
@@ -87,45 +99,99 @@ void CMesh::Render(HDC hDCFrameBuffer, XMFLOAT4X4& xmf4x4World, CCamera *pCamera
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 CCubeMesh::CCubeMesh(float fWidth, float fHeight, float fDepth) : CMesh(6)
+
 {
+
 	float fHalfWidth = fWidth * 0.5f;
+
 	float fHalfHeight = fHeight * 0.5f;
+
 	float fHalfDepth = fDepth * 0.5f;
 
+
+
 	CPolygon *pFrontFace = new CPolygon(4);
-	pFrontFace->SetVertex(0, CVertex(-fHalfWidth, +fHalfHeight, -fHalfDepth));		   // - + -
-	pFrontFace->SetVertex(1, CVertex(+fHalfWidth, +fHalfHeight, -fHalfDepth));		   // + + -
-	pFrontFace->SetVertex(2, CVertex(+fHalfWidth, -fHalfHeight, -fHalfDepth));		   // + - -
-	pFrontFace->SetVertex(3, CVertex(-fHalfWidth, -fHalfHeight, -fHalfDepth));		   // - - -
+
+	pFrontFace->SetVertex(0, CVertex(-fHalfWidth, +fHalfHeight, -fHalfDepth));
+
+	pFrontFace->SetVertex(1, CVertex(+fHalfWidth, +fHalfHeight, -fHalfDepth));
+
+	pFrontFace->SetVertex(2, CVertex(+fHalfWidth, -fHalfHeight, -fHalfDepth));
+
+	pFrontFace->SetVertex(3, CVertex(-fHalfWidth, -fHalfHeight, -fHalfDepth));
+
 	SetPolygon(0, pFrontFace);
 
+
+
+	CPolygon *pTopFace = new CPolygon(4);
+
+	pTopFace->SetVertex(0, CVertex(-fHalfWidth, +fHalfHeight, +fHalfDepth));
+
+	pTopFace->SetVertex(1, CVertex(+fHalfWidth, +fHalfHeight, +fHalfDepth));
+
+	pTopFace->SetVertex(2, CVertex(+fHalfWidth, +fHalfHeight, -fHalfDepth));
+
+	pTopFace->SetVertex(3, CVertex(-fHalfWidth, +fHalfHeight, -fHalfDepth));
+
+	SetPolygon(1, pTopFace);
+
+
+
 	CPolygon *pBackFace = new CPolygon(4);
-	pBackFace->SetVertex(0, CVertex(-fHalfWidth, -fHalfHeight, +fHalfDepth));		   // - - + 
-	pBackFace->SetVertex(1, CVertex(+fHalfWidth, -fHalfHeight, +fHalfDepth));		   // + - +
-	pBackFace->SetVertex(2, CVertex(+fHalfWidth, +fHalfHeight, +fHalfDepth));		   // + + +
-	pBackFace->SetVertex(3, CVertex(-fHalfWidth, +fHalfHeight, +fHalfDepth));		   // - + +
-	SetPolygon(1, pBackFace);
 
-	CPolygon *pLeftFace1 = new CPolygon(2);
-	pLeftFace1->SetVertex(0, CVertex(-fHalfWidth, +fHalfHeight, +fHalfDepth));		   // - + +
-	pLeftFace1->SetVertex(1, CVertex(-fHalfWidth, +fHalfHeight, -fHalfDepth));		   // - + -
-	SetPolygon(2, pLeftFace1);
+	pBackFace->SetVertex(0, CVertex(-fHalfWidth, -fHalfHeight, +fHalfDepth));
 
-	CPolygon *pLeftFace2 = new CPolygon(2);
-	pLeftFace2->SetVertex(0, CVertex(-fHalfWidth, -fHalfHeight, -fHalfDepth));		   // - - -
-	pLeftFace2->SetVertex(1, CVertex(-fHalfWidth, -fHalfHeight, +fHalfDepth));		   // - - +
-	SetPolygon(3, pLeftFace2);
+	pBackFace->SetVertex(1, CVertex(+fHalfWidth, -fHalfHeight, +fHalfDepth));
 
-	CPolygon *pRightFace1 = new CPolygon(2);
-	pRightFace1->SetVertex(0, CVertex(+fHalfWidth, +fHalfHeight, -fHalfDepth));		   // + + -
-	pRightFace1->SetVertex(1, CVertex(+fHalfWidth, +fHalfHeight, +fHalfDepth));		   // + + +
-	SetPolygon(4, pRightFace1);
+	pBackFace->SetVertex(2, CVertex(+fHalfWidth, +fHalfHeight, +fHalfDepth));
 
-	CPolygon *pRightFace2 = new CPolygon(2);
-	pRightFace2->SetVertex(0, CVertex(+fHalfWidth, -fHalfHeight, +fHalfDepth));		   // + - +
-	pRightFace2->SetVertex(1, CVertex(+fHalfWidth, -fHalfHeight, -fHalfDepth));		   // + - -
-	SetPolygon(5, pRightFace2);
-	
+	pBackFace->SetVertex(3, CVertex(-fHalfWidth, +fHalfHeight, +fHalfDepth));
+
+	SetPolygon(2, pBackFace);
+
+
+
+	CPolygon *pBottomFace = new CPolygon(4);
+
+	pBottomFace->SetVertex(0, CVertex(-fHalfWidth, -fHalfHeight, -fHalfDepth));
+
+	pBottomFace->SetVertex(1, CVertex(+fHalfWidth, -fHalfHeight, -fHalfDepth));
+
+	pBottomFace->SetVertex(2, CVertex(+fHalfWidth, -fHalfHeight, +fHalfDepth));
+
+	pBottomFace->SetVertex(3, CVertex(-fHalfWidth, -fHalfHeight, +fHalfDepth));
+
+	SetPolygon(3, pBottomFace);
+
+
+
+	CPolygon *pLeftFace = new CPolygon(4);
+
+	pLeftFace->SetVertex(0, CVertex(-fHalfWidth, +fHalfHeight, +fHalfDepth));
+
+	pLeftFace->SetVertex(1, CVertex(-fHalfWidth, +fHalfHeight, -fHalfDepth));
+
+	pLeftFace->SetVertex(2, CVertex(-fHalfWidth, -fHalfHeight, -fHalfDepth));
+
+	pLeftFace->SetVertex(3, CVertex(-fHalfWidth, -fHalfHeight, +fHalfDepth));
+
+	SetPolygon(4, pLeftFace);
+
+
+
+	CPolygon *pRightFace = new CPolygon(4);
+
+	pRightFace->SetVertex(0, CVertex(+fHalfWidth, +fHalfHeight, -fHalfDepth));
+
+	pRightFace->SetVertex(1, CVertex(+fHalfWidth, +fHalfHeight, +fHalfDepth));
+
+	pRightFace->SetVertex(2, CVertex(+fHalfWidth, -fHalfHeight, +fHalfDepth));
+
+	pRightFace->SetVertex(3, CVertex(+fHalfWidth, -fHalfHeight, -fHalfDepth));
+
+	SetPolygon(5, pRightFace);
+
 }
 
 CCubeMesh::~CCubeMesh(void)
@@ -218,6 +284,47 @@ CWallMesh::CWallMesh(float fWidth, float fHeight, float fDepth, int nSubRects) :
 
 CWallMesh::~CWallMesh(void)
 {
+}
+
+void CWallMesh::Render(HDC hDCFrameBuffer, XMFLOAT4X4& xmf4x4World, CCamera *pCamera)
+{
+	XMFLOAT4X4 xmf4x4Transform = Matrix4x4::Multiply(xmf4x4World, pCamera->m_xmf4x4ViewProject);
+
+	for (int j = 0; j < m_nPolygons; j++)
+	{
+		int nVertices = m_ppPolygons[j]->m_nVertices;
+		CVertex *pVertices = m_ppPolygons[j]->m_pVertices;
+
+		XMFLOAT3 p1 = Vector3::TransformCoord(pVertices[0].m_xmf3Position, xmf4x4Transform);
+		XMFLOAT3 p2 = Vector3::TransformCoord(pVertices[1].m_xmf3Position, xmf4x4Transform);
+		XMFLOAT3 p3 = Vector3::TransformCoord(pVertices[2].m_xmf3Position, xmf4x4Transform);
+
+		XMFLOAT3 dir1 = Vector3::Subtract(p2, p1);
+		XMFLOAT3 dir2 = Vector3::Subtract(p3, p2);
+
+
+			XMFLOAT3 xmf3Previous(-1.0f, 0.0f, 0.0f);
+			for (int i = 0; i <= nVertices; i++)
+			{
+				CVertex vertex = pVertices[i % nVertices];
+				//World/View/Projection Transformation(Perspective Divide)
+				XMFLOAT3 xmf3Current = Vector3::TransformCoord(vertex.m_xmf3Position, xmf4x4Transform);
+				if ((xmf3Current.z >= 0.0f) && (xmf3Current.z <= 1.0f))			//일단 절두체 컬링
+				{
+					//Screen Transformation
+					xmf3Current.x = +xmf3Current.x * (pCamera->m_Viewport.m_nWidth * 0.5f) + pCamera->m_Viewport.m_xStart + (pCamera->m_Viewport.m_nWidth * 0.5f);
+					xmf3Current.y = -xmf3Current.y * (pCamera->m_Viewport.m_nHeight * 0.5f) + pCamera->m_Viewport.m_yStart + (pCamera->m_Viewport.m_nHeight * 0.5f);
+
+					if (xmf3Previous.x >= 0.0f)
+					{
+						::MoveToEx(hDCFrameBuffer, (long)xmf3Previous.x, (long)xmf3Previous.y, NULL);
+						::LineTo(hDCFrameBuffer, (long)xmf3Current.x, (long)xmf3Current.y);
+					}
+					xmf3Previous = xmf3Current;
+				}
+			}
+		
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

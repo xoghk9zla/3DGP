@@ -283,7 +283,7 @@ void CScene::Animate(float fElapsedTime)
 
 	for (int i = 0; i < m_nObjects; i++) m_ppObjects[i]->Animate(fElapsedTime);
 
-	for(int i = 0 ; i < m_pPlayer->m_Bulletlsit.size(); ++i) 
+	//for(int i = 0 ; i < m_pPlayer->m_Bulletlsit.size(); ++i) 
 
 	CheckObjectByWallCollisions();
 
