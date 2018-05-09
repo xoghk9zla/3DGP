@@ -1,11 +1,1 @@
-﻿  stdafx.cpp
-  Camera.cpp
-  GameFramework.cpp
-  GameObject.cpp
-  LabProject.cpp
-  Mesh.cpp
-  Player.cpp
-  Scene.cpp
-  Timer.cpp
-  코드를 생성하고 있습니다...
-  LabProject.vcxproj -> C:\Users\xorbs\OneDrive\바탕 화면\공부\3DGP\따라하기\Software Renderer\LabProject(DirectXMath-Player)\x64\Debug\LabProject.exe
+﻿  LabProject.vcxproj -> C:\Users\xorbs\OneDrive\Documents\GitHub\3DGP\따라하기\Software Renderer\LabProject(DirectXMath-Player)\x64\Debug\LabProject.exe

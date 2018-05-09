@@ -78,9 +78,9 @@ void CMesh::Render(HDC hDCFrameBuffer, XMFLOAT4X4& xmf4x4World, CCamera *pCamera
 				CVertex vertex = pVertices[i % nVertices];
 				//World/View/Projection Transformation(Perspective Divide)
 				XMFLOAT3 xmf3Current = Vector3::TransformCoord(vertex.m_xmf3Position, xmf4x4Transform);
-				if ((xmf3Current.z >= 0.0f) && (xmf3Current.z <= 1.0f))			//일단 절두체 컬링
+				if ((xmf3Current.z >= 0.0f) && (xmf3Current.z <= 1.0f))			// 절두체 컬링
 				{
-					//Screen Transformation
+					// Screen Transformation
 					xmf3Current.x = +xmf3Current.x * (pCamera->m_Viewport.m_nWidth * 0.5f) + pCamera->m_Viewport.m_xStart + (pCamera->m_Viewport.m_nWidth * 0.5f);
 					xmf3Current.y = -xmf3Current.y * (pCamera->m_Viewport.m_nHeight * 0.5f) + pCamera->m_Viewport.m_yStart + (pCamera->m_Viewport.m_nHeight * 0.5f);
 
@@ -101,12 +101,9 @@ void CMesh::Render(HDC hDCFrameBuffer, XMFLOAT4X4& xmf4x4World, CCamera *pCamera
 CCubeMesh::CCubeMesh(float fWidth, float fHeight, float fDepth) : CMesh(6)
 
 {
-
 	float fHalfWidth = fWidth * 0.5f;
 	float fHalfHeight = fHeight * 0.5f;
 	float fHalfDepth = fDepth * 0.5f;
-
-
 
 	CPolygon *pFrontFace = new CPolygon(4);
 	pFrontFace->SetVertex(0, CVertex(-fHalfWidth, +fHalfHeight, -fHalfDepth));

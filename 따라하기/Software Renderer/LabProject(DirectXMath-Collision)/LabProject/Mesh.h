@@ -30,8 +30,6 @@ class CMesh
 public:
 	CMesh(int nPolygons);
 	virtual ~CMesh();
-
-private:
 	int							m_nReferences;
 
 	int							m_nPolygons;
@@ -56,6 +54,8 @@ class CCubeMesh : public CMesh
 public:
 	CCubeMesh(float fWidth = 4.0f, float fHeight = 4.0f, float fDepth = 4.0f);
 	virtual ~CCubeMesh();
+
+	virtual void Render(HDC hDCFrameBuffer, XMFLOAT4X4& xmf4x4World, CCamera *pCamera);
 };
 
 class CWallMesh : public CMesh

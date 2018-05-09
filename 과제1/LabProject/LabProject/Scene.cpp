@@ -66,7 +66,7 @@ void CScene::BuildObjects()
 
 	// 벽 생성
 	float fHalfWidth = 45.0f, fHalfHeight = 45.0f, fHalfDepth = 100.0f;
-	int iSubRects = 5;
+	int iSubRects = 15;
 	CWallMesh *pWallCubeMesh = new CWallMesh(fHalfWidth * 2.0f, fHalfHeight * 2.0f, fHalfDepth * 2.0f, iSubRects);
 	pWallCubeMesh->SetOOBB(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(fHalfWidth, fHalfHeight, fHalfDepth * 0.5f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
@@ -310,7 +310,7 @@ void CScene::CheckBulletByWallCollisions()
 	auto iter_begin = m_pPlayer->m_plistBullet.begin();
 	auto iter_end = m_pPlayer->m_plistBullet.end();
 
-	for (; iter_begin != iter_end; ++iter_begin)
+	for (; iter_begin != iter_end; )
 	{
 		// 개체가 개체를 포함하고 있는지( DISJOINT = 0, INTERSECTS = 1, CONTAINS = 2)
 		ContainmentType containType = m_pWallsObject[0]->m_xmOOBB.Contains((*iter_begin)->m_xmOOBB);
@@ -331,9 +331,11 @@ void CScene::CheckBulletByWallCollisions()
 			}
 			if (nPlaneIndex != -1)
 			{
-				XMVECTOR xmvNormal = XMVectorSet(m_pWallsObject[0]->m_pxmf4WallPlanes[nPlaneIndex].x, m_pWallsObject[0]->m_pxmf4WallPlanes[nPlaneIndex].y, m_pWallsObject[0]->m_pxmf4WallPlanes[nPlaneIndex].z, 0.0f);
-				XMVECTOR xmvReflect = XMVector3Reflect(XMLoadFloat3(&(*iter_begin)->m_xmf3MovingDirection), xmvNormal);
-				XMStoreFloat3(&(*iter_begin)->m_xmf3MovingDirection, xmvReflect);
+				delete *iter_begin;
+				iter_begin = m_pPlayer->m_plistBullet.erase(iter_begin);
+			}
+			else {
+				++iter_begin;
 			}
 			break;
 		}
@@ -351,9 +353,11 @@ void CScene::CheckBulletByWallCollisions()
 			}
 			if (nPlaneIndex != -1)
 			{
-				XMVECTOR xmvNormal = XMVectorSet(m_pWallsObject[0]->m_pxmf4WallPlanes[nPlaneIndex].x, m_pWallsObject[0]->m_pxmf4WallPlanes[nPlaneIndex].y, m_pWallsObject[0]->m_pxmf4WallPlanes[nPlaneIndex].z, 0.0f);
-				XMVECTOR xmvReflect = XMVector3Reflect(XMLoadFloat3(&(*iter_begin)->m_xmf3MovingDirection), xmvNormal);
-				XMStoreFloat3(&(*iter_begin)->m_xmf3MovingDirection, xmvReflect);
+				delete *iter_begin;
+				iter_begin = m_pPlayer->m_plistBullet.erase(iter_begin);
+			}
+			else {
+				++iter_begin;
 			}
 			break;
 		}
