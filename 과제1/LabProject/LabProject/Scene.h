@@ -14,6 +14,9 @@ public:
 	int							m_nObjects = 0;
 	CGameObject					**m_ppObjects = NULL;
 
+	int							m_nBullets = 0;
+	CGameObject					**m_ppBullets = NULL;
+
 	CWallsObject				*m_pWallsObject = NULL;
 
 	virtual void BuildObjects();

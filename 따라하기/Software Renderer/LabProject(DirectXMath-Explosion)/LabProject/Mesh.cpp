@@ -86,7 +86,7 @@ void CMesh::Render(HDC hDCFrameBuffer, XMFLOAT4X4& xmf4x4World, CCamera *pCamera
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-CCubeMesh::CCubeMesh(float fWidth, float fHeight, float fDepth) : CMesh(6)
+CCubeMesh::CCubeMesh(float fWidth, float fHeight, float fDepth) : CMesh(4)
 {
 	float fHalfWidth = fWidth * 0.5f;
 	float fHalfHeight = fHeight * 0.5f;
@@ -111,7 +111,7 @@ CCubeMesh::CCubeMesh(float fWidth, float fHeight, float fDepth) : CMesh(6)
 	pBackFace->SetVertex(1, CVertex(+fHalfWidth, -fHalfHeight, +fHalfDepth));
 	pBackFace->SetVertex(2, CVertex(+fHalfWidth, +fHalfHeight, +fHalfDepth));
 	pBackFace->SetVertex(3, CVertex(-fHalfWidth, +fHalfHeight, +fHalfDepth));
-	SetPolygon(2, pBackFace);
+	SetPolygon(1, pBackFace);
 
 	CPolygon *pBottomFace = new CPolygon(4);
 	pBottomFace->SetVertex(0, CVertex(-fHalfWidth, -fHalfHeight, -fHalfDepth));
@@ -125,14 +125,14 @@ CCubeMesh::CCubeMesh(float fWidth, float fHeight, float fDepth) : CMesh(6)
 	pLeftFace->SetVertex(1, CVertex(-fHalfWidth, +fHalfHeight, -fHalfDepth));
 	pLeftFace->SetVertex(2, CVertex(-fHalfWidth, -fHalfHeight, -fHalfDepth));
 	pLeftFace->SetVertex(3, CVertex(-fHalfWidth, -fHalfHeight, +fHalfDepth));
-	SetPolygon(4, pLeftFace);
+	SetPolygon(2, pLeftFace);
 
 	CPolygon *pRightFace = new CPolygon(4);
 	pRightFace->SetVertex(0, CVertex(+fHalfWidth, +fHalfHeight, -fHalfDepth));
 	pRightFace->SetVertex(1, CVertex(+fHalfWidth, +fHalfHeight, +fHalfDepth));
 	pRightFace->SetVertex(2, CVertex(+fHalfWidth, -fHalfHeight, +fHalfDepth));
 	pRightFace->SetVertex(3, CVertex(+fHalfWidth, -fHalfHeight, -fHalfDepth));
-	SetPolygon(5, pRightFace);
+	SetPolygon(3, pRightFace);
 }
 
 CCubeMesh::~CCubeMesh(void)

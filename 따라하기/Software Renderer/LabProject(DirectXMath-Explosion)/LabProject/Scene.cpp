@@ -54,7 +54,7 @@ void CScene::BuildObjects()
 {
 	CExplosiveObject::PrepareExplosion();
 
-	float fHalfWidth = 45.0f, fHalfHeight = 45.0f, fHalfDepth = 110.0f;
+	float fHalfWidth = 45.0f, fHalfHeight = 45.0f, fHalfDepth = 50.0f;
 	int iSubRects = 5;
 	CWallMesh *pWallCubeMesh = new CWallMesh(fHalfWidth * 2.0f, fHalfHeight * 2.0f, fHalfDepth * 2.0f, iSubRects);
 	pWallCubeMesh->SetOOBB(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(fHalfWidth, fHalfHeight, fHalfDepth * 0.3f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));

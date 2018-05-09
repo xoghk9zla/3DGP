@@ -23,8 +23,6 @@ public:
 
 	CCamera						*m_pCamera = NULL;
 
-	list<CCubeMesh>				m_Bulletlsit;		// ÃÑ¾Ë ¸®½ºÆ®
-
 	void SetPosition(float x, float y, float z);
 	void Move(DWORD dwDirection, float fDistance);
 	void Move(XMFLOAT3& xmf3Shift, bool bUpdateVelocity);
