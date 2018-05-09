@@ -232,3 +232,13 @@ void CExplosiveObject::Render(HDC hDCFrameBuffer, CCamera *pCamera)
 		CGameObject::Render(hDCFrameBuffer, pCamera);
 	}
 }
+
+CBullet::CBullet()
+{
+
+}
+
+CBullet::~CBullet()
+{
+
+}

@@ -20,6 +20,14 @@ CPlayer::CPlayer()
 
 CPlayer::~CPlayer()
 {
+	auto iter_begin = m_plistBullet.begin();
+	auto iter_end = m_plistBullet.end();
+
+	for (; iter_begin != iter_end; ++iter_begin)
+	{
+		delete (*iter_begin);
+	}
+	m_plistBullet.clear();
 }
 
 void CPlayer::SetPosition(float x, float y, float z)
@@ -109,6 +117,40 @@ void CPlayer::Update(float fTimeElapsed)
 	float fDeceleration = m_fFriction * fTimeElapsed;
 	if (fDeceleration > fLength) fDeceleration = fLength;
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Deceleration, fDeceleration);
+
+	if (GetAsyncKeyState(VK_CONTROL))
+	{
+		// 총알을 생성 한다.
+
+		CGameObject* pTempBullet = new CBullet;
+
+		CCubeMesh* pTempCubeMesh = new CCubeMesh(1.0f, 1.0f, 1.0f);
+		pTempCubeMesh->SetOOBB(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+		pTempBullet->SetMesh(pTempCubeMesh);
+		pTempBullet->SetColor(RGB(150, 0, 70));
+		XMFLOAT3 tempLook = Vector3::ScalarProduct(m_xmf3Look, 5.f, true);
+		pTempBullet->SetPosition(Vector3::Add(m_xmf3Position, tempLook));
+		pTempBullet->SetRotationAxis(XMFLOAT3(0.0f, 1.0f, 1.0f));
+		pTempBullet->SetRotationSpeed(1000.0f);
+		pTempBullet->SetMovingDirection(m_xmf3Look);
+		pTempBullet->SetMovingSpeed(100.f);
+
+		m_plistBullet.push_back(pTempBullet);
+	}
+
+	
+	if (m_plistBullet.size() != 0)
+	{
+		auto iter_begin = m_plistBullet.begin();
+		auto iter_end = m_plistBullet.end();
+
+		for (; iter_begin != iter_end; ++iter_begin)
+		{
+			(*iter_begin)->Animate(fTimeElapsed);
+		}
+	}
+
 }
 
 void CPlayer::Render(HDC hDCFrameBuffer, CCamera *pCamera)
@@ -121,6 +163,19 @@ void CPlayer::Render(HDC hDCFrameBuffer, CCamera *pCamera)
 	m_xmf4x4World = Matrix4x4::Multiply(XMMatrixRotationRollPitchYaw(XMConvertToRadians(90.0f), 0.0f, 0.0f), m_xmf4x4World);
 
 	CGameObject::Render(hDCFrameBuffer, pCamera);
+
+
+
+	if (m_plistBullet.size() != 0)
+	{
+		auto iter_begin = m_plistBullet.begin();
+		auto iter_end = m_plistBullet.end();
+
+		for (; iter_begin != iter_end; ++iter_begin)
+		{
+			(*iter_begin)->Render(hDCFrameBuffer, pCamera);
+		}
+	}
 }
 
 void CPlayer::Shoot()

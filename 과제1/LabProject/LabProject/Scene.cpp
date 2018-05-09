@@ -275,19 +275,45 @@ void CScene::CheckObjectByWallCollisions()
 	}
 }
 
+void CScene::CheckBulletByObjectCollisions()
+{
+
+	for (int i = 0; i < m_nObjects; i++) m_ppObjects[i]->m_pObjectCollided = NULL;
+
+
+	for (int i = 0; i < m_nObjects; i++)
+	{
+		auto iter_begin = m_pPlayer->m_plistBullet.begin();
+		auto iter_end = m_pPlayer->m_plistBullet.end();
+
+		for (; iter_begin != iter_end;)
+		{
+			if (m_ppObjects[i]->m_xmOOBB.Intersects((*iter_begin)->m_xmOOBB) && dynamic_cast<CExplosiveObject*>(m_ppObjects[i])->m_bBlowingUp != true)
+			{
+				dynamic_cast<CExplosiveObject*>(m_ppObjects[i])->m_bBlowingUp = true;
+				delete *iter_begin;
+				iter_begin = m_pPlayer->m_plistBullet.erase(iter_begin);
+			}
+			else {
+				++iter_begin;
+			}
+		}
+	}
+}
+
 void CScene::Animate(float fElapsedTime)
 {
 	m_pWallsObject->Animate(fElapsedTime);
 	// 이 부분 수정 필요 옆면에 닿으면 튕겨져 나가고, 앞 뒷면에 닿으면 새로 벽 생성
 	//if (m_pWallsObject->m_xmOOBB.Contains(XMLoadFloat3(&m_pPlayer->m_xmf3Position)) == DISJOINT) m_pPlayer->SetPosition(0.0,0.0,0.0);
 
-	for (int i = 0; i < m_nObjects; i++) m_ppObjects[i]->Animate(fElapsedTime);
-
-	//for(int i = 0 ; i < m_pPlayer->m_Bulletlsit.size(); ++i) 
+	for (int i = 0; i < m_nObjects; i++) m_ppObjects[i]->Animate(fElapsedTime); 
 
 	CheckObjectByWallCollisions();
 
 	CheckObjectByObjectCollisions();
+
+	CheckBulletByObjectCollisions();
 }
 
 void CScene::Render(HDC hDCFrameBuffer, CCamera *pCamera)

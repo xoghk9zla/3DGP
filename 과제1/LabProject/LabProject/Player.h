@@ -23,6 +23,8 @@ public:
 
 	CCamera						*m_pCamera = NULL;
 
+	list<CGameObject*>		m_plistBullet;
+
 	void SetPosition(float x, float y, float z);
 	void Move(DWORD dwDirection, float fDistance);
 	void Move(XMFLOAT3& xmf3Shift, bool bUpdateVelocity);

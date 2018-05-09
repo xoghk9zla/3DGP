@@ -14,9 +14,6 @@ public:
 	int							m_nObjects = 0;
 	CGameObject					**m_ppObjects = NULL;
 
-	int							m_nBullets = 0;
-	CGameObject					**m_ppBullets = NULL;
-
 	CWallsObject				*m_pWallsObject = NULL;
 
 	virtual void BuildObjects();
@@ -24,6 +21,7 @@ public:
 
 	virtual void CheckObjectByObjectCollisions();
 	virtual void CheckObjectByWallCollisions();
+	virtual void CheckBulletByObjectCollisions();
 
 	virtual void Animate(float fElapsedTime);
 	virtual void Render(HDC hDCFrameBuffer, CCamera *pCamera);
