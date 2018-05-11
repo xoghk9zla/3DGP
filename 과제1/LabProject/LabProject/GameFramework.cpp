@@ -208,7 +208,7 @@ void CGameFramework::FrameAdvance()
 {    
     if (!m_bActive) return;
 
-	m_GameTimer.Tick(0.0f);
+	m_GameTimer.Tick(60.0f);
 
 	ProcessInput();	
 

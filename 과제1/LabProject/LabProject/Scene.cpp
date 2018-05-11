@@ -46,11 +46,6 @@ void CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 			m_ppObjects[m_nObjects - 1]->SetMovingSpeed(10.5f);
 			break;
 		}
-		case '2':
-		{
-			m_pPlayer->Shoot();
-			break;
-		}
 		default:
 			break;
 		}
@@ -310,59 +305,64 @@ void CScene::CheckBulletByWallCollisions()
 	auto iter_begin = m_pPlayer->m_plistBullet.begin();
 	auto iter_end = m_pPlayer->m_plistBullet.end();
 
-	for (; iter_begin != iter_end; )
-	{
-		// 개체가 개체를 포함하고 있는지( DISJOINT = 0, INTERSECTS = 1, CONTAINS = 2)
-		ContainmentType containType = m_pWallsObject[0]->m_xmOOBB.Contains((*iter_begin)->m_xmOOBB);
-		switch (containType)
+	for (int i = 0; i < 5; ++i) {
+		for (; iter_begin != iter_end; )
 		{
-		case DISJOINT:
-		{
-			int nPlaneIndex = -1;
-			for (int j = 0; j < 6; j++)
-			{
-				// 객체가 평면과 교차하는지 여부( FRONT = 0, INTERSECTING = 1, BACK = 2)
-				PlaneIntersectionType intersectType = (*iter_begin)->m_xmOOBB.Intersects(XMLoadFloat4(&m_pWallsObject[0]->m_pxmf4WallPlanes[j]));
-				if (intersectType == BACK)
+			// 개체가 개체를 포함하고 있는지( DISJOINT = 0, INTERSECTS = 1, CONTAINS = 2)
+			if ((200.0f * i <= m_pPlayer->GetPosition().z + 100 && m_pPlayer->GetPosition().z + 100 <= 200.0f * (i + 1)) ||
+				(200.0f * i <= m_pPlayer->GetPosition().z - 100 && m_pPlayer->GetPosition().z - 100 <= 200.0f * (i + 1))) {
+				ContainmentType containType = m_pWallsObject[i]->m_xmOOBB.Contains((*iter_begin)->m_xmOOBB);
+				switch (containType)
 				{
-					nPlaneIndex = j;
+				case DISJOINT:
+				{
+					int nPlaneIndex = -1;
+					for (int j = 1; j < 5; j++)
+					{
+						// 객체가 평면과 교차하는지 여부( FRONT = 0, INTERSECTING = 1, BACK = 2)
+						PlaneIntersectionType intersectType = (*iter_begin)->m_xmOOBB.Intersects(XMLoadFloat4(&m_pWallsObject[i]->m_pxmf4WallPlanes[j]));
+						if (intersectType == BACK)
+						{
+							nPlaneIndex = j;
+							break;
+						}
+					}
+					if (nPlaneIndex != -1)
+					{
+						delete *iter_begin;
+						iter_begin = m_pPlayer->m_plistBullet.erase(iter_begin);
+					}
+					else {
+						++iter_begin;
+					}
+					break;
+				}
+				case INTERSECTS:
+				{
+					int nPlaneIndex = -1;
+					for (int j = 1; j < 5; j++)
+					{
+						PlaneIntersectionType intersectType = (*iter_begin)->m_xmOOBB.Intersects(XMLoadFloat4(&m_pWallsObject[i]->m_pxmf4WallPlanes[j]));
+						if (intersectType == INTERSECTING)
+						{
+							nPlaneIndex = j;
+							break;
+						}
+					}
+					if (nPlaneIndex != -1)
+					{
+						delete *iter_begin;
+						iter_begin = m_pPlayer->m_plistBullet.erase(iter_begin);
+					}
+					else {
+						++iter_begin;
+					}
+					break;
+				}
+				case CONTAINS:
 					break;
 				}
 			}
-			if (nPlaneIndex != -1)
-			{
-				delete *iter_begin;
-				iter_begin = m_pPlayer->m_plistBullet.erase(iter_begin);
-			}
-			else {
-				++iter_begin;
-			}
-			break;
-		}
-		case INTERSECTS:
-		{
-			int nPlaneIndex = -1;
-			for (int j = 0; j < 6; j++)
-			{
-				PlaneIntersectionType intersectType = (*iter_begin)->m_xmOOBB.Intersects(XMLoadFloat4(&m_pWallsObject[0]->m_pxmf4WallPlanes[j]));
-				if (intersectType == INTERSECTING)
-				{
-					nPlaneIndex = j;
-					break;
-				}
-			}
-			if (nPlaneIndex != -1)
-			{
-				delete *iter_begin;
-				iter_begin = m_pPlayer->m_plistBullet.erase(iter_begin);
-			}
-			else {
-				++iter_begin;
-			}
-			break;
-		}
-		case CONTAINS:
-			break;
 		}
 	}
 }

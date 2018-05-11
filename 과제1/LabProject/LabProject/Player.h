@@ -32,7 +32,6 @@ public:
 	void Rotate(float fPitch = 0.0f, float fYaw = 0.0f, float fRoll = 0.0f);
 	void SetCameraOffset(XMFLOAT3& xmf3CameraOffset);
 	void Update(float fTimeElapsed=0.016f);
-	void Shoot();
 
 	virtual void Render(HDC hDCFrameBuffer, CCamera *pCamera);
 };

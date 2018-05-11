@@ -118,7 +118,7 @@ void CPlayer::Update(float fTimeElapsed)
 	if (fDeceleration > fLength) fDeceleration = fLength;
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Deceleration, fDeceleration);
 
-	if (GetAsyncKeyState(VK_CONTROL))
+	if (GetAsyncKeyState(VK_CONTROL) && m_plistBullet.size() < 20)
 	{
 		// 총알을 생성 한다.
 
@@ -176,9 +176,4 @@ void CPlayer::Render(HDC hDCFrameBuffer, CCamera *pCamera)
 			(*iter_begin)->Render(hDCFrameBuffer, pCamera);
 		}
 	}
-}
-
-void CPlayer::Shoot()
-{
-//	m_Bulletlsit.emplace_back(1.14f, 1.14f, 1.14f);
 }
